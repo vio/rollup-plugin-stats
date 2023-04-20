@@ -35,3 +35,7 @@ module.exports = {
   ],
 };
 ```
+
+### Options
+
+- `filename` - the JSON filename relative to the build folder, default: `stats.json`

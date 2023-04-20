@@ -2,7 +2,7 @@ import { Plugin } from 'rollup';
 
 const NAME = 'rollupStats';
 
-interface rollupStatsOptions {
+interface RollupStatsOptions {
   /**
    * JSON file output fileName
    * default: stats.json
@@ -10,7 +10,7 @@ interface rollupStatsOptions {
   fileName?: string;
 }
 
-export const rollupStats = (options: rollupStatsOptions = {}): Plugin => ({
+export const rollupStats = (options: RollupStatsOptions = {}): Plugin => ({
   name: NAME,
   generateBundle(_, bundle) {
     this.emitFile({
