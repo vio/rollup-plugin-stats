@@ -8,6 +8,15 @@
     "email": "vio@beanon.com",
     "url": "https://beanon.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vio/rollup-plugin-stats.git"
+  },
+  "keywords": [
+    "rollup",
+    "plugin",
+    "stats"
+  ],
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
