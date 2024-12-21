@@ -19,7 +19,7 @@ jobs:
         run: echo "npm_cache=yarn" >> $GITHUB_STATE
 
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: ${{ env.npm_cache }}
