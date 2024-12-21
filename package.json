@@ -47,7 +47,7 @@
   "module": "dist/rollup-plugin-stats.esm.js",
   "devDependencies": {
     "husky": "^8.0.3",
-    "rollup": "^1.32.1",
+    "rollup": "^4.29.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2"
