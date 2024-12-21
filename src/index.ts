@@ -10,7 +10,7 @@ interface RollupStatsOptions {
   fileName?: string;
 }
 
-export const rollupStats = (options: RollupStatsOptions = {}): Plugin => ({
+const rollupStats = (options: RollupStatsOptions = {}): Plugin => ({
   name: NAME,
   generateBundle(_, bundle) {
     this.emitFile({
@@ -20,3 +20,5 @@ export const rollupStats = (options: RollupStatsOptions = {}): Plugin => ({
     });
   },
 });
+
+export default rollupStats;

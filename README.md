@@ -25,13 +25,25 @@ yarn add --dev rollup-plugin-stats
 ## Configure
 
 ```js
+// rollup.config.mjs
+import stats from 'rollup-plugin-stats';
+
+export default {
+  plugins: [
+    // add it as the last plugin
+    stats(),
+  ],
+};
+```
+
+```js
 // rollup.config.js
-const { rollupStats } = require('rollup-plugin-stats');
+const stats = require('rollup-plugin-stats');
 
 module.exports = {
   plugins: [
     // add it as the last plugin
-    rollupStats(),
+    stats(),
   ],
 };
 ```
