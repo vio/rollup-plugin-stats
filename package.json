@@ -50,6 +50,6 @@
     "rollup": "^1.32.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.5.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.7.2"
   }
 }
