@@ -20,22 +20,26 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test --passWithNoTests",
-    "lint": "tsdx lint src",
-    "prepare": "tsdx build"
+    "build": "rollup -c rollup.config.mjs",
+    "test": "echo \"No tests\" && exit 0",
+    "lint": "tsdx lint src"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "npm run lint"
     }
   },
   "prettier": {
@@ -46,10 +50,11 @@
   },
   "module": "dist/rollup-plugin-stats.esm.js",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@tsconfig/node18": "^18.2.4",
     "husky": "^8.0.3",
-    "rollup": "^1.32.1",
+    "rollup": "^2.79.2",
     "tsdx": "^0.14.1",
-    "tslib": "^2.8.1",
     "typescript": "^5.7.2"
   }
 }

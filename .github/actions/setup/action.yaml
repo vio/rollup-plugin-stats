@@ -1,0 +1,20 @@
+name: "Setup"
+description: "Setup node/npm and install dependencies"
+runs:
+  using: "composite"
+  steps:
+    - name: "Resolve caching"
+      id: cache
+      if: ${{ github.ref_name != 'update-dependencies' && !startsWith(github.ref_name, 'dependabot/') }}
+      run: echo "node_cache=npm" >> $GITHUB_STATE
+      shell: "bash"
+
+    - name: "Setup Node.js"
+      uses: actions/setup-node@v4.1.0
+      with:
+        node-version-file: '.nvmrc'
+        cache: ${{ env.node_cache }}
+
+    - name: "Install dependencies"
+      run: npm ci
+      shell: "bash"
