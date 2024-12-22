@@ -49,4 +49,6 @@ module.exports = {
 
 ### Options
 
-- `filename` - the JSON filename relative to the build folder, default: `stats.json`
+- `fileName` - the JSON filename relative to the build folder, default: `stats.json`
+- `stats` 
+    - `source` - output asset/chunk/module source
