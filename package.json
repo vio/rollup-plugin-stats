@@ -38,7 +38,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test:unit": "echo \"No tests\" && exit 0",
-    "test:package": "vitest test/package"
+    "test:package": "vitest test/package",
+    "bump": "./scripts/bump.sh",
+    "release": "./scripts/release.sh"
   },
   "husky": {
     "hooks": {
@@ -50,6 +52,7 @@
     "@release-it/conventional-changelog": "9.0.3",
     "@rollup/plugin-typescript": "^12.1.2",
     "@tsconfig/node18": "^18.2.4",
+    "dotenv": "^16.4.7",
     "eslint": "^9.17.0",
     "globals": "^15.14.0",
     "husky": "^8.0.3",
