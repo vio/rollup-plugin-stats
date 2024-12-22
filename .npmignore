@@ -1,0 +1,8 @@
+.github
+scripts
+test
+eslint.config.mjs
+prettier.config.mjs
+rollup.config.mjs
+tsconfig.json
+verdaccio.yml
