@@ -1,10 +1,8 @@
 # rollup-plugin-stats
 
-> **Warning**
-> Under active development
-
 [![](https://img.shields.io/npm/v/rollup-plugin-stats.svg)](https://www.npmjs.com/package/rollup-plugin-stats)
 ![](https://img.shields.io/node/v/rollup-plugin-stats.svg)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/rollup-plugin-stats)](https://socket.dev/npm/package/rollup-plugin-stats)
 [![CI](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml/badge.svg)](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml)
 
 Output Rollup stats JSON file
@@ -51,4 +49,4 @@ module.exports = {
 
 - `fileName` - the JSON filename relative to the build folder, default: `stats.json`
 - `stats` 
-    - `source` - output asset/chunk/module source
+    - `source` - output asset/chunk/module source (default `false`)

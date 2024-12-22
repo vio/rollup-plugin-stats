@@ -1,5 +1,6 @@
 {
   "name": "rollup-plugin-stats",
+  "description": "Output Rollup stats",
   "version": "0.1.0",
   "license": "MIT",
   "private": false,
