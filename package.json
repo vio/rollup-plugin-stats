@@ -34,27 +34,27 @@
   },
   "scripts": {
     "build": "rollup -c rollup.config.mjs",
-    "test": "echo \"No tests\" && exit 0",
-    "lint": "tsdx lint src"
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "test": "echo \"No tests\" && exit 0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "npm run prettier && npm run lint"
     }
-  },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
   },
   "module": "dist/rollup-plugin-stats.esm.js",
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "@tsconfig/node18": "^18.2.4",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
     "husky": "^8.0.3",
+    "prettier": "^3.4.2",
     "rollup": "^2.79.2",
     "tsdx": "^0.14.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1"
   }
 }
