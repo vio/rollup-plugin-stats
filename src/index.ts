@@ -1,6 +1,13 @@
 import { Plugin } from 'rollup';
 
-const NAME = 'rollupStats';
+import extractRollupStats from './extract';
+
+const PLUGIN_NAME = 'rollupStats';
+const DEFAULT_FILE_NAME = 'stats.json';
+
+function defaultFormatOutput(stats: unknown): string {
+  return JSON.stringify(stats, null, 2);
+}
 
 interface RollupStatsOptions {
   /**
@@ -10,15 +17,17 @@ interface RollupStatsOptions {
   fileName?: string;
 }
 
-const rollupStats = (options: RollupStatsOptions = {}): Plugin => ({
-  name: NAME,
-  generateBundle(_, bundle) {
-    this.emitFile({
-      type: 'asset',
-      fileName: options?.fileName || 'stats.json',
-      source: JSON.stringify(bundle, null, 2),
-    });
-  },
-});
+function rollupStats(options: RollupStatsOptions = {}): Plugin {
+  return {
+    name: PLUGIN_NAME,
+    generateBundle(_, bundle) {
+      this.emitFile({
+        type: 'asset',
+        fileName: options?.fileName || DEFAULT_FILE_NAME,
+        source: defaultFormatOutput(extractRollupStats(bundle)),
+      });
+    },
+  } satisfies Plugin;
+}
 
 export default rollupStats;
