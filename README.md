@@ -7,7 +7,7 @@
 ![](https://img.shields.io/node/v/rollup-plugin-stats.svg)
 [![CI](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml/badge.svg)](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml)
 
-Output Rollup stats JSON file 
+Output Rollup stats JSON file
 
 ## Install
 
@@ -21,21 +21,34 @@ or
 yarn add --dev rollup-plugin-stats
 ```
 
-
 ## Configure
 
 ```js
+// rollup.config.mjs
+import stats from 'rollup-plugin-stats';
+
+export default {
+  plugins: [
+    // add it as the last plugin
+    stats(),
+  ],
+};
+```
+
+```js
 // rollup.config.js
-const { rollupStats } = require('rollup-plugin-stats');
+const stats = require('rollup-plugin-stats');
 
 module.exports = {
   plugins: [
     // add it as the last plugin
-    rollupStats(),
+    stats(),
   ],
 };
 ```
 
 ### Options
 
-- `filename` - the JSON filename relative to the build folder, default: `stats.json`
+- `fileName` - the JSON filename relative to the build folder, default: `stats.json`
+- `stats` 
+    - `source` - output asset/chunk/module source

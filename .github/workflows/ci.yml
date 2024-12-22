@@ -1,0 +1,139 @@
+name: ci
+on:
+  push:
+    branches:
+      - master
+      - next
+    tags:
+      - v*
+  pull_request:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Setup"
+        uses: "./.github/actions/setup"
+
+      - name: "Lint"
+        run: npm run lint
+
+  test-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Setup"
+        uses: "./.github/actions/setup"
+
+      - name: "Test"
+        run: npm run test:unit
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Setup"
+        uses: "./.github/actions/setup"
+
+      - name: "Build"
+        run: yarn run build
+
+      - name: "Upload build files"
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: build-artifacts
+          retention-days: 1
+          path: dist*/
+
+  test-package:
+    name: "Test package on rollup v${{ matrix.rollup }} / node ${{ matrix.node }} / ${{ matrix.os }}"
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "20", "18"]
+        os: [ubuntu-latest, windows-latest]
+        rollup: ["3", "4"]
+        exclude:
+          - os: windows-latest
+            node: 20
+          - os: windows-latest
+            node: 18
+          - rollup: 3
+            node: 20
+          - rollup: 3
+            node: 18
+
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4.2.2
+
+      - name: "Use Node.js"
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: "Install test dependencies"
+        run: npm install vitest
+
+      - name: "Download build files"
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: build-artifacts
+
+      - name: "Setup local npm registry"
+        run: ./scripts/setup-registry.sh
+
+      - name: "Install test package dependencies"
+        run: |
+          npm install 
+          npm install rollup@${{ matrix.rollup }} --force
+          npx rollup -v
+        working-directory: test/package
+
+      - name: "Test package"
+        run: npm run test:package
+
+  tests:
+    needs:
+      - lint
+      - test-unit
+      - build
+      - test-package
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit 0
+
+  publish:
+    # Run only for version tags
+    if: contains(github.ref, 'refs/tags/v')
+    needs:
+      - "tests"
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - name: "Setup"
+        uses: "./.github/actions/setup"
+
+      - name: "Download build"
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: "Release package"
+        run: npm run release
+        env:
+          NPM_CONFIG_PROVENANCE: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
