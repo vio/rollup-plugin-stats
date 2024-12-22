@@ -23,6 +23,7 @@ export default defineConfig([
     output: {
       dir: OUTPUT_DIR,
       format: 'commonjs',
+      exports: 'default',
       entryFileNames: '[name].cjs',
       sourcemap: true,
     },
