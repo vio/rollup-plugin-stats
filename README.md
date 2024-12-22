@@ -3,7 +3,7 @@
 [![](https://img.shields.io/npm/v/rollup-plugin-stats.svg)](https://www.npmjs.com/package/rollup-plugin-stats)
 ![](https://img.shields.io/node/v/rollup-plugin-stats.svg)
 [![Socket Badge](https://socket.dev/api/badge/npm/package/rollup-plugin-stats)](https://socket.dev/npm/package/rollup-plugin-stats)
-[![CI](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml/badge.svg)](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml)
+[![ci](https://github.com/vio/rollup-plugin-stats/actions/workflows/ci.yml/badge.svg)](https://github.com/vio/rollup-plugin-stats/actions/workflows/ci.yml)
 
 Output Rollup stats JSON file
 
