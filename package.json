@@ -45,6 +45,7 @@
     }
   },
   "devDependencies": {
+    "@release-it/conventional-changelog": "9.0.3",
     "@eslint/js": "^9.17.0",
     "@rollup/plugin-typescript": "^12.1.2",
     "@tsconfig/node18": "^18.2.4",
@@ -52,6 +53,7 @@
     "globals": "^15.14.0",
     "husky": "^8.0.3",
     "prettier": "^3.4.2",
+    "release-it": "17.10.0",
     "rollup": "^2.79.2",
     "tsdx": "^0.14.1",
     "typescript": "^5.7.2",
