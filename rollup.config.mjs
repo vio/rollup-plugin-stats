@@ -2,7 +2,7 @@ import { defineConfig } from 'rollup';
 import typescript from '@rollup/plugin-typescript';
 
 const INPUT = {
-  'index': './src/index.ts',
+  index: './src/index.ts',
 };
 
 const OUTPUT_DIR = 'dist';

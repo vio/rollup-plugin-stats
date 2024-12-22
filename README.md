@@ -7,7 +7,7 @@
 ![](https://img.shields.io/node/v/rollup-plugin-stats.svg)
 [![CI](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml/badge.svg)](https://github.com/vio/rollup-plugin-stats/actions/workflows/main.yml)
 
-Output Rollup stats JSON file 
+Output Rollup stats JSON file
 
 ## Install
 
@@ -20,7 +20,6 @@ or
 ```shell
 yarn add --dev rollup-plugin-stats
 ```
-
 
 ## Configure
 

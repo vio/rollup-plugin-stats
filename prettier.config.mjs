@@ -10,5 +10,5 @@ export default {
         singleQuote: false,
       },
     },
-  ]
+  ],
 };
