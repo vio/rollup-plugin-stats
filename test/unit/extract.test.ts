@@ -13,4 +13,14 @@ describe('extract', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(extract(rollupStats.stats as any, { source: true })).toMatchSnapshot();
   });
+
+  test('should extract rollup stats with excluded assets', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(extract(rollupStats.stats as any, { excludeAssets : /vendors/ })).toMatchSnapshot();
+  });
+
+  test('should extract rollup stats with excluded modules', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(extract(rollupStats.stats as any, { excludeModules : /utils.js/ })).toMatchSnapshot();
+  });
 });
