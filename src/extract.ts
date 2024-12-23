@@ -1,5 +1,6 @@
 import { OutputAsset, OutputBundle, OutputChunk, RenderedModule } from 'rollup';
 import omit from 'lodash/omit.js';
+import { type ExcludeFilepathPatterns, checkExcludeFilepath } from './utils/check-exclude-filepath';
 
 export type AssetStats = Omit<OutputAsset, 'source'> & {
   source?: OutputAsset['source'];
@@ -22,47 +23,70 @@ export type StatsOptions = {
    * @default false 
    */
   source?: boolean;
+  /**
+   * Exclude matching assets
+   */
+  excludeAssets?: ExcludeFilepathPatterns;
+  /**
+   * Exclude matching modules
+   */
+  excludeModules?: ExcludeFilepathPatterns;
 }
 
 export default function extractRollupStats(bundle: OutputBundle, options: StatsOptions = {}): Stats {
-  const { source = false } = options;
+  const { source = false, excludeAssets, excludeModules } = options;
 
   const output: Stats = {};
 
-  Object.entries(bundle).forEach(([key, entry]) => {
-    if (entry.type === "asset") {
-      let entryAsset = structuredClone(entry) as AssetStats;
+  Object.entries(bundle).forEach(([bundleEntryFilepath, bundleEntryStats]) => {
+    // Skip extraction if the entry filepath matches the exclude assets pattern
+    if (checkExcludeFilepath(bundleEntryFilepath, excludeAssets)) {
+      return;
+    }
 
-      // Skip asset source if options.source is false
+    if (bundleEntryStats.type === "asset") {
+      let assetStats = structuredClone(bundleEntryStats) as AssetStats;
+
+      // Skip asset source if options source is false
       if (!source) {
-        entryAsset = omit(entryAsset, 'source');
+        assetStats = omit(assetStats, 'source');
       }
 
-      output[key] = entryAsset;
+      output[bundleEntryFilepath] = assetStats;
 
       return;
     }
 
-    if (entry.type === "chunk") {
-      let entryChunk = structuredClone(entry) as ChunkStats;
+    if (bundleEntryStats.type === "chunk") {
+      let chunkStats = structuredClone(bundleEntryStats) as ChunkStats;
 
-      // Skip chunk code if options.source is false
+      // Skip chunk source if options source is false
       if (!source) {
-        entryChunk = omit(entryChunk, 'code');
+        chunkStats = omit(chunkStats, 'code');
       }
 
-      Object.entries(entryChunk.modules).forEach(([moduleKey, moduleEntry]) => {
-        let entryChunkModule = structuredClone(moduleEntry) as ModuleStats;
+      // Extract chunk modules stats
+      const chunkModulesStats: ChunkStats['modules'] = {};
 
-        // Skip module source if source is false
-        if (!source) {
-          entryChunkModule = omit(entryChunkModule, 'code');
+      Object.entries(chunkStats.modules).forEach(([bundleModuleFilepath, bundleModuleStats]) => {
+        // Skip module extraction if the filepath matches the exclude modules pattern
+        if (checkExcludeFilepath(bundleModuleFilepath, excludeModules)) {
+          return;
         }
 
-        entryChunk.modules[moduleKey] = entryChunkModule;
+        let moduleStats = structuredClone(bundleModuleStats) as ModuleStats;
+
+        // Skip module source if options source is false
+        if (!source) {
+          moduleStats = omit(moduleStats, 'code');
+        }
+
+        chunkModulesStats[bundleModuleFilepath] = moduleStats;
       });
 
-      output[key] = entryChunk;
+      chunkStats.modules = chunkModulesStats;
+
+      output[bundleEntryFilepath] = chunkStats;
 
       return;
     }
