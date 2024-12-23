@@ -6,6 +6,7 @@ const INPUT = {
 };
 
 const OUTPUT_DIR = 'dist';
+const EXTERNAL = ['node:fs/promises', 'node:path', 'node:process'];
 
 export default defineConfig([
   {
@@ -16,7 +17,8 @@ export default defineConfig([
       entryFileNames: '[name].mjs',
       sourcemap: true,
     },
-    plugins: [typescript({ tsconfig: './tsconfig.json' })],
+    external: EXTERNAL,
+    plugins: [typescript()],
   },
   {
     input: INPUT,
@@ -27,6 +29,7 @@ export default defineConfig([
       entryFileNames: '[name].cjs',
       sourcemap: true,
     },
-    plugins: [typescript({ tsconfig: './tsconfig.json' })],
+    external: EXTERNAL,
+    plugins: [typescript()],
   },
 ]);

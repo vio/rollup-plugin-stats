@@ -1,36 +1,75 @@
-import { Plugin } from 'rollup';
+import path from 'node:path';
+import process from 'node:process';
+import fs from 'node:fs/promises';
+import type { Plugin } from 'rollup';
 
-import extractRollupStats, { type StatsOptions } from './extract';
+import extractRollupStats, { type Stats, type StatsOptions } from './extract';
 
 const PLUGIN_NAME = 'rollupStats';
 const DEFAULT_FILE_NAME = 'stats.json';
 
-function defaultFormatOutput(stats: unknown): string {
-  return JSON.stringify(stats, null, 2);
-}
+export type RollupStatsWriteResponse = {
+  filepath: string;
+  content: string;
+};
+
+export type RollupStatsWrite = (filepath: string, stats: Stats) => RollupStatsWriteResponse;
 
 export type RollupStatsOptions = {
   /**
-   * JSON file output fileName
-   * default: stats.json
+   * Output filename relative to Rollup output directory or absolute
+   * @default: stats.json
    */
   fileName?: string;
+  /**
+   * Rollup stats options
+   */
   stats?: StatsOptions;
+  /**
+   * Custom file writer
+   * @default - fs.write(FILENAME, JSON.stringify(STATS, null, 2));
+   */
+  write?: RollupStatsWrite;
 };
 
 function rollupStats(options: RollupStatsOptions = {}): Plugin {
-  const { fileName, stats } = options;
+  const { fileName, stats: statsOptions, writer = rollupStatsWrite } = options;
 
   return {
     name: PLUGIN_NAME,
-    generateBundle(_, bundle) {
-      this.emitFile({
-        type: 'asset',
-        fileName: fileName || DEFAULT_FILE_NAME,
-        source: defaultFormatOutput(extractRollupStats(bundle, stats)),
-      });
+    async generateBundle(context, bundle) {
+      const resolvedFileName = fileName || DEFAULT_FILE_NAME;
+      const filepath = path.isAbsolute(resolvedFileName)
+        ? resolvedFileName
+        : path.join(context.dir || process.cwd(), resolvedFileName);
+
+      const stats = extractRollupStats(bundle, statsOptions);
+
+      try {
+        const res = await writer(filepath, stats);
+        const outputSize = Buffer.byteLength(res.content, 'utf-8');
+
+        this.info(`Stats saved to ${res.filepath} (${outputSize})`);
+      } catch (error) {
+        // Log error, but do not throw to allow the compilation to continue
+        this.warn(error);
+      }
     },
   } satisfies Plugin;
+}
+
+export async function rollupStatsWrite(filepath: string, stats: Stats): WriteInfo {
+  const content = JSON.stringify(stats, null, 2);
+
+  // Create base directory if it does not exist
+  await fs.mkdir(path.dirname(filepath), { recursive: true });
+
+  await fs.writeFile(filepath, content);
+
+  return {
+    filepath,
+    content,
+  };
 }
 
 export default rollupStats;

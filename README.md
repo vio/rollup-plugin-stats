@@ -47,7 +47,8 @@ module.exports = {
 
 ### Options
 
-- `fileName` - the JSON filename relative to the build folder, default: `stats.json`
+- `fileName` - the JSON filepath relative to the build folder or absolute(default: `stats.json`)
+- `write` - format and write the stats to disk(default: `fs.write(filename, JSON.stringify(stats, null, 2))`)
 - `stats` 
     - `source` - output asset/chunk/module source (default `false`)
     - `excludeAssets` - exclude matching assets: `string | RegExp | ((filepath: string) => boolean) | Array<string | RegExp | ((filepath: string) => boolean)>`
