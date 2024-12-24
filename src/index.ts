@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import type { Plugin } from 'rollup';
 
 import extractRollupStats, { type Stats, type StatsOptions } from './extract';
+import { formatFileSize } from './utils/format-file-size';
 
 const PLUGIN_NAME = 'rollupStats';
 const DEFAULT_FILE_NAME = 'stats.json';
@@ -49,7 +50,7 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
         const res = await writer(filepath, stats);
         const outputSize = Buffer.byteLength(res.content, 'utf-8');
 
-        this.info(`Stats saved to ${res.filepath} (${outputSize})`);
+        this.info(`Stats saved to ${res.filepath} (${formatFileSize(outputSize)})`);
       } catch (error) {
         // Log error, but do not throw to allow the compilation to continue
         this.warn(error);
@@ -58,7 +59,9 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
   } satisfies Plugin;
 }
 
-export async function rollupStatsWrite(filepath: string, stats: Stats): WriteInfo {
+export default rollupStats;
+
+async function rollupStatsWrite(filepath: string, stats: Stats): WriteInfo {
   const content = JSON.stringify(stats, null, 2);
 
   // Create base directory if it does not exist
@@ -72,4 +75,3 @@ export async function rollupStatsWrite(filepath: string, stats: Stats): WriteInf
   };
 }
 
-export default rollupStats;
