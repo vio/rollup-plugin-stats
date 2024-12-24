@@ -1,5 +1,6 @@
 import { OutputAsset, OutputBundle, OutputChunk, RenderedModule } from 'rollup';
 import omit from 'lodash/omit.js';
+import entries from 'lodash/entries.js';
 import { type ExcludeFilepathPatterns, checkExcludeFilepath } from './utils/check-exclude-filepath';
 
 export type AssetStats = Omit<OutputAsset, 'source'> & {
@@ -38,7 +39,7 @@ export default function extractRollupStats(bundle: OutputBundle, options: StatsO
 
   const output: Stats = {};
 
-  Object.entries(bundle).forEach(([bundleEntryFilepath, bundleEntryStats]) => {
+  entries(bundle).forEach(([bundleEntryFilepath, bundleEntryStats]) => {
     // Skip extraction if the entry filepath matches the exclude assets pattern
     if (checkExcludeFilepath(bundleEntryFilepath, excludeAssets)) {
       return;
@@ -68,7 +69,7 @@ export default function extractRollupStats(bundle: OutputBundle, options: StatsO
       // Extract chunk modules stats
       const chunkModulesStats: ChunkStats['modules'] = {};
 
-      Object.entries(chunkStats.modules).forEach(([bundleModuleFilepath, bundleModuleStats]) => {
+      entries(chunkStats.modules).forEach(([bundleModuleFilepath, bundleModuleStats]) => {
         // Skip module extraction if the filepath matches the exclude modules pattern
         if (checkExcludeFilepath(bundleModuleFilepath, excludeModules)) {
           return;
