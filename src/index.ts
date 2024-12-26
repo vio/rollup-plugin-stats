@@ -1,20 +1,13 @@
 import path from 'node:path';
 import process from 'node:process';
-import fs from 'node:fs/promises';
 import type { Plugin } from 'rollup';
 
-import extractRollupStats, { type Stats, type StatsOptions } from './extract';
+import extractRollupStats, { type StatsOptions } from './extract';
+import { type RollupStatsWrite, rollupStatsWrite } from './write';
 import { formatFileSize } from './utils/format-file-size';
 
 const PLUGIN_NAME = 'rollupStats';
 const DEFAULT_FILE_NAME = 'stats.json';
-
-export type RollupStatsWriteResponse = {
-  filepath: string;
-  content: string;
-};
-
-export type RollupStatsWrite = (filepath: string, stats: Stats) => RollupStatsWriteResponse;
 
 export type RollupStatsOptions = {
   /**
@@ -51,7 +44,7 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
         const outputSize = Buffer.byteLength(res.content, 'utf-8');
 
         this.info(`Stats saved to ${res.filepath} (${formatFileSize(outputSize)})`);
-      } catch (error: any) {
+      } catch (error: any) { // eslint-disable-line
         // Log error, but do not throw to allow the compilation to continue
         this.warn(error);
       }
@@ -60,18 +53,4 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
 }
 
 export default rollupStats;
-
-async function rollupStatsWrite(filepath: string, stats: Stats): Promise<RollupStatsWriteResponse> {
-  const content = JSON.stringify(stats, null, 2);
-
-  // Create base directory if it does not exist
-  await fs.mkdir(path.dirname(filepath), { recursive: true });
-
-  await fs.writeFile(filepath, content);
-
-  return {
-    filepath,
-    content,
-  };
-}
 
