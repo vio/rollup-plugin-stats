@@ -34,7 +34,7 @@ export type RollupStatsOptions = {
 };
 
 function rollupStats(options: RollupStatsOptions = {}): Plugin {
-  const { fileName, stats: statsOptions, writer = rollupStatsWrite } = options;
+  const { fileName, stats: statsOptions, write = rollupStatsWrite } = options;
 
   return {
     name: PLUGIN_NAME,
@@ -47,11 +47,11 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
       const stats = extractRollupStats(bundle, statsOptions);
 
       try {
-        const res = await writer(filepath, stats);
+        const res = await write(filepath, stats);
         const outputSize = Buffer.byteLength(res.content, 'utf-8');
 
         this.info(`Stats saved to ${res.filepath} (${formatFileSize(outputSize)})`);
-      } catch (error) {
+      } catch (error: any) {
         // Log error, but do not throw to allow the compilation to continue
         this.warn(error);
       }
@@ -61,7 +61,7 @@ function rollupStats(options: RollupStatsOptions = {}): Plugin {
 
 export default rollupStats;
 
-async function rollupStatsWrite(filepath: string, stats: Stats): WriteInfo {
+async function rollupStatsWrite(filepath: string, stats: Stats): Promise<RollupStatsWriteResponse> {
   const content = JSON.stringify(stats, null, 2);
 
   // Create base directory if it does not exist
