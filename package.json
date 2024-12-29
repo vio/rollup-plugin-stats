@@ -4,14 +4,17 @@
   "version": "1.1.1",
   "license": "MIT",
   "private": false,
-  "author": {
-    "name": "Viorel Cojocaru",
-    "email": "vio@beanon.com",
-    "url": "https://beanon.com"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vio/rollup-plugin-stats.git"
+    "url": "git+https://github.com/relative-ci/rollup-plugin-stats.git"
+  },
+  "bugs": {
+    "url": "https://github.com/relative-ci/rollup-plugin-stats/issues"
+  },
+  "author": {
+    "name": "Viorel Cojocaru",
+    "email": "vio@relative-ci.com",
+    "url": "https://relative-ci.com"
   },
   "keywords": [
     "rollup",
@@ -19,7 +22,7 @@
     "stats"
   ],
   "main": "dist/index.cjs",
-  "module": "dist/index.m:wjsjs",
+  "module": "dist/index.mjs",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
